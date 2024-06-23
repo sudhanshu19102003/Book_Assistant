@@ -16,8 +16,7 @@ load_dotenv()
 
 class get_books_data(BaseTool):
     name = "google_books_data"
-    description = """It retrieves information from Google Books API based on category, which comes under the BISAC book industry subject and category standard. The data retrieved is stored in the database for use. Remember, only one category can be fetched at a time.
-    Examples: 'Fiction' , 'Antiques & Collectibles', 'Architecture' and etc. """
+    description = """Retrieves information from Google Books API based on category..."""
 
     def _run(self, genre: str) -> str:
         try:
@@ -108,13 +107,35 @@ if __name__ == '__main__':
     retrieve_data = get_data_from_db()
     print(retrieve_data.run("3"))
     instructions = """
-    your are an assistant that helps users find information about books.
-    Assistant is a large language model.
-    Assistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
-    Assistant doesn't know anything about books so it should use the tools provided to fetch the data and present it in a readable format. Remember, you can say no if you don't get any data from tools.
-    only use the data rom the tools provided to answer the questions.
-    the process involves fetching data from the google books api and storing it in the database.
-    the data is then queried from the database to get the required information.
+    You are an assistant that helps users find information about books.
+Assistant is a large language model.
+Assistant is designed to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. 
+As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
+Assistant should only use the tools provided to fetch the data and present it in a readable format. Remember, you can say no if you don't get any data from tools.
+
+Process:
+1. Fetch data from the Google Books API and store it in the database.
+2. Query the database to get the required information.
+3. Present the information in a clear and readable format.
+
+Output format:
+- When an action is needed, clearly indicate the action.
+- Separate the final answer from any actions.
+
+Example:
+Thought: Do I need to use a tool? Yes
+Action: google_books_data
+Action Input: Fiction
+
+Observation: Data from Google Books API has been stored in the database.
+
+Thought: Do I need to use a tool? Yes
+Action: retrieve_data_from_db
+Action Input: 10
+
+Observation: Retrieved data from the database.
+
+Final Answer: Here are the top 10 Fiction books...
     """
     get_books_info = get_books_data()
     get_books_info_tool = db_query_tool()
@@ -133,7 +154,7 @@ if __name__ == '__main__':
         tools=tools,
         prompt=prompt,
     )
-    agent_executor = AgentExecutor(agent=agent, memory=memory, tools=tools, )
+    agent_executor = AgentExecutor(agent=agent, memory=memory, tools=tools, handle_parsing_errors=True)     
     
     try:
         result = agent_executor.invoke({"input": "give me top 10 friction books"})
