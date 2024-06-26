@@ -60,7 +60,7 @@ class BookInfo:
 
 if __name__ == '__main__':
     book_info = BookInfo()
-    book_info.category = 'Antiques & Collectibles'
+    book_info.category = 'Fiction'
     book_info.maxResults = 10
     book_info.get_top_books()
 

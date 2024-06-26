@@ -1,1 +1,6 @@
 .env
+__pycache__/Agent.cpython-310.pyc
+__pycache__/agent.cpython-310.pyc
+__pycache__/BookInfo.cpython-310.pyc
+__pycache__/Tool.cpython-310.pyc
+__pycache__/BookInfo.cpython-310.pyc
