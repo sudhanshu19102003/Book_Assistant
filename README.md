@@ -8,7 +8,7 @@ https://github.com/sudhanshu19102003/LLM_agent_books/assets/78022236/a001d579-1c
 
 ## Components
 
-### 1. Initialization and Setup
+### 1. Initialization and Setup.
 
 The `BookAssistant` class initializes several components:
 
