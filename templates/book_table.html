@@ -1,0 +1,35 @@
+<div class="books-layout">
+    <div class="table-container">
+        <table>
+            <tr>
+                <th>No.</th>
+                <th>Cover</th>
+                <th>Title</th>
+                <th>Authors</th>
+                <th>Publisher</th>
+                <th>Published Date</th>
+            </tr>
+            {% for book in books %}
+            <tr class="book-row"
+                data-unique-id="{{ unique_id }}"
+                data-title="{{ book.title }}"
+                data-authors="{{ book.authors }}"
+                data-publisher="{{ book.publisher }}"
+                data-date="{{ book.published_date }}"
+                data-description="{{ book.description }}"
+                data-thumbnail="{{ book.thumbnail }}">
+                <td>{{ book.index }}</td>
+                <td>{{ book.cover_html | safe }}</td>
+                <td>{{ book.title_html | safe }}</td>
+                <td>{{ book.authors_html | safe }}</td>
+                <td>{{ book.publisher_html | safe }}</td>
+                <td>{{ book.published_date }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div class="book-details" id="bookDetails_{{ unique_id }}">
+        <span class="close-details" data-unique-id="{{ unique_id }}">&times;</span>
+        <div id="detailsContent_{{ unique_id }}">Click on a book to see details</div>
+    </div>
+</div>
