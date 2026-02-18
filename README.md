@@ -1,32 +1,48 @@
-# BookAssistant README
+# Book Assistant
 
-## Overview
-
-The BookAssistant is designed to interact with users, retrieve book information using various tools, and present structured responses. It leverages a language model (ChatAnthropic), Vector database, and a LangChain state graph to efficiently manage interactions and data flow.
+An intelligent book search assistant powered by AI agents that retrieves and displays book information from Google Books API with an interactive Streamlit interface.
 
 https://github.com/sudhanshu19102003/LLM_agent_books/assets/78022236/a001d579-1c09-4830-964b-e719b200782e
 
-## Components
+## Features
 
-### 1. Initialization and Setup.
+- **AI-Powered Search** - Natural language queries to find books by title, author, category, or keywords
+- **Google Books Integration** - Real-time data retrieval from Google Books API
+- **Vector Search** - Semantic search through stored book data using ChromaDB
+- **Interactive UI** - Clean Streamlit chat interface with dynamic book tables
+- **Smart Caching** - Stores retrieved books locally for faster subsequent searches
+- **Multi-Search Display** - View results from multiple searches simultaneously
 
-The `BookAssistant` class initializes several components:
+## Setup
 
-- **Language Model:** Uses ChatAnthropic.
-- **Tools:** Defines tools (`googleAPI_retrieval`, `present_book_info`, `search_db`) for retrieving and presenting book information.
+1. **Clone the repository**
+```bash
+git clone <repository-url>
+cd Book_Assistant
+```
 
-### 2. Graph Construction
+2. **Install dependencies**
+```bash
+uv sync
+```
+get uv from https://docs.astral.sh/uv/getting-started/installation/
 
-- **State Graph:** Constructs a state graph to manage state transitions and tool interactions.
-  
-  - **Nodes and Edges:**
-    - Adds nodes for an assistant (handling user interactions) and tools (containing tools and error handling).
-    - Establishes conditional edges and entry points (assistant) within the graph.
+3. **Set up environment variables**
+Create a `.env` file with your API keys:
+```
+ANTHROPIC_API_KEY=your_anthropic_key_here
+```
 
-### 3. Tools
+4. **Run the application**
+```bash
+uv run streamlit run main.py
+```
 
-- `googleAPI_retrieval`: This class acts as a wrapper for retrieving data from the Google Books API. The fetched data is stored in both JSON format and a Chroma database, facilitating efficient extraction and search operations.
+## Key Libraries
 
-- `present_book_info`: This function extracts data from the JSON file and renders it in the chat interface using a token, enhancing data presentation reliability and reducing model token usage.
-
-- `search_db`: Enables vector similarity search on retrieved data, enhancing search capabilities based on content similarity.
+- **LangChain** - Agent orchestration and tool management
+- **LangGraph** - State graph for workflow management
+- **Anthropic Claude** - LLM for natural language understanding
+- **ChromaDB** - Vector database for semantic search
+- **Streamlit** - Interactive web interface
+- **Google Books API** - Book data source
