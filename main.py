@@ -1,3 +1,5 @@
+import os
+
 import streamlit as st
 from agent import BookAssistant
 import streamlit.components.v1 as components
@@ -6,11 +8,44 @@ import streamlit.components.v1 as components
 st.set_page_config(layout="wide")
 
 
+def render_sidebar() -> str | None:
+    """Render the sidebar API key input and return the active API key (or None)."""
+    with st.sidebar:
+        st.title("⚙️ Settings")
+        st.markdown("---")
+        st.subheader("🔑 Anthropic API Key")
+
+        user_key = st.text_input(
+            "Enter your Anthropic API key",
+            type="password",
+            placeholder="sk-ant-...",
+            help="Your key is used only for this session and is never stored.",
+        )
+
+        if user_key:
+            st.success("Using your API key.")
+        elif os.getenv("ANTHROPIC_API_KEY"):
+            st.info("Using the server's default API key.")
+        else:
+            st.warning(
+                "No API key found. Please enter your Anthropic API key above."
+            )
+
+    return user_key or None
+
+
 # Section: Initialize BookAssistant instance
-def get_assistant():
-    # find all json files in the current directory and delete the
-    if "assistant" not in st.session_state:
-        st.session_state.assistant = BookAssistant()
+def get_assistant(api_key: str | None = None):
+    """Return (or rebuild) the BookAssistant, recreating it when the key changes."""
+    key_changed = st.session_state.get("active_api_key") != api_key
+
+    if "assistant" not in st.session_state or key_changed:
+        st.session_state.active_api_key = api_key
+        st.session_state.assistant = BookAssistant(api_key=api_key)
+        if key_changed and "messages" in st.session_state:
+            # Reset conversation when the key changes so context is clean
+            st.session_state.messages = []
+
     return st.session_state.assistant
 
 
@@ -150,9 +185,11 @@ def handle_user_input(prompt: str, assistant: BookAssistant):
 
 def main():
     """Main application entry point."""
+    api_key = render_sidebar()
+
     # Initialize session state
     initialize_session_state()
-    assistant = get_assistant()
+    assistant = get_assistant(api_key=api_key)
 
     # Display chat messages from history on app rerun
     display_chat_history()

@@ -27,8 +27,11 @@ TOKEN_END = ">"
 class BookAssistant:
     """Agent for retrieving and presenting book information."""
 
-    def __init__(self) -> None:
-        self.llm = ChatAnthropic(model="claude-haiku-4-5-20251001", temperature=0)
+    def __init__(self, api_key: str | None = None) -> None:
+        llm_kwargs = {"model": "claude-haiku-4-5-20251001", "temperature": 0}
+        if api_key:
+            llm_kwargs["api_key"] = api_key
+        self.llm = ChatAnthropic(**llm_kwargs)
         self.primary_assistant_prompt = ChatPromptTemplate.from_messages(
             [
                 (
